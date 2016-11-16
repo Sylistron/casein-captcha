@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+        PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+        "http://java.sun.com/j2ee/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+  <tlibversion>1.1</tlibversion>
+  <jspversion>1.2</jspversion>
+  <shortname>cpt</shortname>
+  <uri>http://www.dasein.org/taglibs/captcha_jsp_1_2</uri>
+
+  <tag>
+    <name>challenge</name>
+    <tagclass>org.dasein.captcha.taglib.ChallengeTag</tagclass>
+    <bodycontent>empty</bodycontent>
+    <attribute>
+      <name>var</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>varError</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+</taglib>

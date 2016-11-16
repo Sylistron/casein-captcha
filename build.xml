@@ -1,0 +1,93 @@
+<project name="Dasein Captcha" default="recompile" basedir=".">
+  <description>Dasein Captcha</description>
+
+  <property name="version" value="1.0.1"/>
+  <property name="src" location="src"/>
+  <property name="dvl" location="."/>
+  <property name="stage" location="../stage"/>
+  <property name="build" location="${stage}/build"/>
+  <property name="dist" location="${stage}/dist"/>
+  <property name="lib" location="lib"/>
+  <property name="doc" location="doc"/>
+  
+  <path id="project.classpath">
+    <pathelement path="${lib}/dasein-persistence.jar"/>
+    <pathelement path="${lib}/dasein-utilities.jar"/>
+    <pathelement path="${lib}/j2ee.jar"/>
+    <pathelement path="${lib}/log4j-1.2.6.jar"/>
+    <pathelement path="${lib}/simplicis-cms.jar"/>
+  </path>
+    
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src}" destdir="${build}" source="5" encoding="utf8" debug="on">
+      <classpath refid="project.classpath"/>
+    </javac>
+  </target>
+
+  <target name="lib" depends="clean,compile">
+    <jar jarfile="${stage}/dasein-captcha.jar" basedir="${build}">
+		<metainf file="captcha.tld"/>
+    	<metainf file="captcha_jsp1_2.tld"/>
+		<manifest>
+			<attribute name="Built-By" value="${user.name}"/>
+			<section name="org.dasein.util">
+				<attribute name="Specification-Title" 
+					value="Dasein Captcha"/>
+				<attribute name="Specification-Version" value="${version}"/>
+				<attribute name="Specification-Vendor" value="Valtira"/>
+				<attribute name="Implementation-Title" value="dasein-captcha"/>
+				<attribute name="Implementation-Version" value="${version} ${TODAY}"/>
+				<attribute name="Implementation-Vendor" value="Valtira"/>
+			</section>
+		</manifest>
+	</jar>
+  </target>
+
+  <target name="doc">
+  	<delete dir="${stage}/doc}"/>
+    <mkdir dir="${stage}/doc"/>
+    <mkdir dir="${stage}/doc/api"/>
+    <javadoc packagenames="org.dasein.*"
+             sourcepath="${src}"
+			 source="5"
+             destdir="${stage}/doc/api"
+             author="true"
+             version="true"
+             use="true">
+      <classpath refid="project.classpath"/>
+      <link href="http://java.sun.com/j2se/1.5.0/docs/api"/>
+    </javadoc>
+  </target>
+    
+  <target name="dist" depends="compile,doc">
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/src"/>
+    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${dist}/doc"/>
+    <copy file="${src}/doc/LICENSE.txt" todir="${dist}"/>
+    <copy todir="${dist}/doc">
+      <fileset dir="${doc}/api">
+        <include name="**/*"/>
+      </fileset>
+    </copy>    
+    <copy todir="${dist}/lib">
+      <fileset dir="${lib}">
+        <include name="**/*.jar"/>
+      </fileset>
+    </copy>    
+  </target>
+
+  <target name="recompile" depends="clean,lib" />
+  
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${stage}/doc"/>
+    <delete file="${stage}/dasein-captcha.jar"/>
+  </target>
+</project>
